@@ -40,9 +40,23 @@ app.post('api/notes', (req, res) => {
     return res.send("Note added")
 });
 
+app.delete('api/notes/:id', (re, res) => {
+    let data = fs.readFileSync(path.join(__dirname, '/db/db.json'), "utf8", () => {});
+
+    data = JSON.parse(data);
+    data = data.filter(datum => datum.id ! = req.params.id)
+
+    data = JSON.stringify(data);
+
+    fs.writeFile(path.join(__dirname, '/db/db.json'), data, () => {});
+
+    return res.send("Note deleted")
+
+});
+
 
 app.listen(PORT, () => {
-    console.log("Notes at http://localhost:${PORT}")
+    console.log('Notes at http://localhost:${PORT}')
 });
 
 
