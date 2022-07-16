@@ -1,9 +1,9 @@
-const expree = require('express');
+const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3001;
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -26,7 +26,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "html?index.html"));
+    res.sendFile(path.join(__dirname, "html/index.html"));
 });
 
 
@@ -70,8 +70,31 @@ app.delete('api/notes/:id', (req, res) => {
         data.splice(data.indexOF(data.find(element => element.id == id)),1);
         return Promise.resolve(data);
     })
-
+    .then(data =>  {
+        writeFileAsync("./db/db.json", JSON.stringify(data));
+        res.send("ok");
+    })
+    .catch(err => {
+        if(err) 
+            throw err;
+    });
 });
+
+app.use(function (req, res, next) {
+    res.status(404).send("Sorry")
+});
+
+// starting server
+app.listen(PORT, function(){
+    console.log('Listening on PORT ${PORT}');
+});
+
+function getLastIndex(data){
+    if (data.length > 0) 
+        return data[data.length-1].id;
+        return 0;
+}
+
 
 
 
