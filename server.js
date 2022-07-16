@@ -3,16 +3,16 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
-app.use(express.static(__dirname + '/html'));
+app.use(express.static(__dirname + '/public'));
 
 app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "html/notes.html"));
+    res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
 app.get("/api/notes", (req, res) => {
@@ -26,7 +26,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "html/index.html"));
+    res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 
