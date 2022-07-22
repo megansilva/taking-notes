@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3001;
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static(__dirname + '/public'));
 
 app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "public/notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 app.get("/api/notes", (req, res) => {
@@ -26,7 +26,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public/index.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 
@@ -43,7 +43,7 @@ app.post("/api/notes", (req, res) => {
     .then(data => {
         newNote.id = getLastIndex (data) + 1;
 
-        (data.length > 0)? data.push(newNote):data = [newNote];
+        (data.length > 0) ? data.push(newNote):data = [newNote];
         return Promise.resolve(data);   
     })
     .then(data => {
@@ -85,15 +85,17 @@ app.use(function (req, res, next) {
 });
 
 // starting server
-app.listen(PORT, function(){
-    console.log('Listening on PORT ${PORT}');
+app.listen(PORT, function() {
+    console.log('Listening on PORT ' + PORT);
 });
 
 function getLastIndex(data){
     if (data.length > 0) 
         return data[data.length-1].id;
         return 0;
-}
+};
+
+
 
 
 
