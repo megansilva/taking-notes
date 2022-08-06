@@ -12,7 +12,9 @@ app.use(express.json());
 app.use(express.static(__dirname + '/public'));
 
 
-
+// routes connection
+require("./routes/api")(app);
+require("./routes/htmlr")(app);
 
 
 
